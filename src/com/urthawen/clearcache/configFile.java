@@ -2,11 +2,14 @@ package com.urthawen.clearcache;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
 import java.io.File;
 import java.io.IOException;
 
 import org.w3c.dom.Document;
-import org.w3c.dom.Attr;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
@@ -34,15 +37,35 @@ public class configFile {
 
         Document document = documentBuilder.newDocument();
 
-
+        //XML Data
         Element root = document.createElement("app");
         document.appendChild(root);
 
+        Element path = document.createElement("path");
+        root.appendChild(path);
 
+        //Create XML
+        TransformerFactory transformerFactory = TransformerFactory.newInstance();
+        Transformer transformer = null;
+        try{
+            transformer = transformerFactory.newTransformer();
+        } catch (Exception e){
+            e.printStackTrace();
+        }
+
+        DOMSource domSource = new DOMSource(document);
+        StreamResult streamResult = new StreamResult(new File("./config.xml"));
+
+        try{
+            transformer.transform(domSource,streamResult);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
     }
 
     public boolean isInstall(){
-        return configFileXML.exists();
+        File f = new File("./config.xml");
+        return f.exists();
     }
 
     public File getConfigFileXML() {
