@@ -16,6 +16,7 @@ import org.w3c.dom.Element;
 public class configFile {
 
     private File configFileXML;
+    private final String author = "Urthawen";
 
     public configFile(){
         try {
@@ -42,7 +43,13 @@ public class configFile {
         document.appendChild(root);
 
         Element path = document.createElement("path");
+        path.appendChild(document.createTextNode("none"));
         root.appendChild(path);
+
+        Element author = document.createElement("author");
+        author.appendChild(document.createTextNode(this.author));
+        root.appendChild(author);
+
 
         //Create XML
         TransformerFactory transformerFactory = TransformerFactory.newInstance();
@@ -61,6 +68,8 @@ public class configFile {
         }catch (Exception e){
             e.printStackTrace();
         }
+
+        System.out.println("ClearCache::configFile      Config created !");
     }
 
     public boolean isInstall(){
